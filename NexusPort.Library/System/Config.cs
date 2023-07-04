@@ -10,9 +10,16 @@ public class Config {
     public JsonNode Node { get; private set; }
 
     public Config(string path) {
-        // path = Paths.GetRootPath(path);
+        path = Paths.GetRootPath(path);
         Path = path;
         if (!File.Exists(path)) File.WriteAllText(path, "{}");
+        Node = JsonNode.Parse(File.ReadAllText(path)) ?? new JsonObject();
+    }
+
+    public Config(string path, string fallback) {
+        path = Paths.GetRootPath(path);
+        Path = path;
+        if (!File.Exists(path)) File.WriteAllText(path, fallback);
         Node = JsonNode.Parse(File.ReadAllText(path)) ?? new JsonObject();
     }
 
