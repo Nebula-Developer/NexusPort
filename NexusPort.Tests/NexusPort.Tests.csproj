@@ -22,4 +22,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\NexusPort.Library\NexusPort.Library.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -1,16 +1,14 @@
 ﻿using System;
+using System.Text.RegularExpressions;
+using System.Text.Json;
+using NexusPort.System;
 
-namespace NexusPort;
-
-public static class Program {
-    public static void Main(String[] args) {
-        while (true) {
-            ConsoleKeyInfo keyInfo = Console.ReadKey(true);
-            Console.WriteLine("Key: " + keyInfo.Key);
-            Console.WriteLine("Alt: " + keyInfo.Modifiers.HasFlag(ConsoleModifiers.Alt));
-            Console.WriteLine("Ctrl: " + keyInfo.Modifiers.HasFlag(ConsoleModifiers.Control));
-            Console.WriteLine("Shift: " + keyInfo.Modifiers.HasFlag(ConsoleModifiers.Shift));
-            Console.WriteLine("KeyChar: " + keyInfo.KeyChar + " (" + (int)keyInfo.KeyChar + ")");
-        }
+class Program
+{
+    static void Main()
+    {
+        Config testConfig = new Config("primary.json");
+        testConfig.Set("test", 5);
+        Console.WriteLine(testConfig.Get<float>("test") + 0.5f);
     }
 }
