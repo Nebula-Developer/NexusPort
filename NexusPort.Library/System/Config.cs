@@ -37,9 +37,10 @@ public class Config {
         return Node[key]?.ToString();
     }
 
-    public T? Get<T>(string key) {
+    public dynamic? Get<T>(string key) {
         string? v = Node[key]?.ToString();
-        if (v == null) return default(T);
+        if (v == null) return null;
+        
         try {
             return JsonSerializer.Deserialize<T>(v);
         } catch {
@@ -48,7 +49,7 @@ public class Config {
             // cast.
             try {
                 return (T) (object) v;
-            } catch { return default(T); }
+            } catch { return null; }
         }
     }
 
@@ -68,5 +69,25 @@ public class Config {
                 WriteIndented = true
             }
         ));
+    }
+
+    public void Write(JsonNode? node) {
+        Node = node ?? new JsonObject();
+        Write();
+    }
+    
+    public void Write<T>(T? obj) {
+        Node = JsonNode.Parse(JsonSerializer.Serialize(obj)) ?? new JsonObject();
+        Write();
+    }
+
+    public T? As<T>() {
+        return JsonSerializer.Deserialize<T>(Node.ToJsonString());
+    }
+
+    public override string ToString() {
+        return Node.ToJsonString(new JsonSerializerOptions {
+            WriteIndented = true
+        });
     }
 }
