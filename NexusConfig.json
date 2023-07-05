@@ -1,8 +1,3 @@
-[
-  [
-    "test"
-  ],
-  [
-    "test2"
-  ]
-]
+{
+  "RootValue": "test"
+}

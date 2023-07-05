@@ -41,6 +41,7 @@ public class JSON {
     public dynamic? this[string key, Type type] {
         get {
             try {
+                if (type == typeof(string)) return Node[key]?.ToString();
                 return JsonSerializer.Deserialize(Node[key]?.ToString() ?? "", type);
             } catch {
                 return null;
@@ -52,7 +53,7 @@ public class JSON {
         get => Node[key];
         set {
             if (Node is JsonArray a)
-                while (a.Count <= key) a.Add(new JsonObject());
+                while (a.Count <= key) a.Add(null);
 
             Node[key] = value;
             Write();
@@ -62,10 +63,39 @@ public class JSON {
     public dynamic? this[int key, Type type] {
         get {
             try {
+                if (type == typeof(string)) return Node[key]?.ToString();
                 return JsonSerializer.Deserialize(Node[key]?.ToString() ?? "", type);
             } catch {
                 return null;
             }
         }
     }
+}
+
+public class JSONBound {
+    public dynamic Key { get; set; }
+    public Type Type { get; set; }
+    public JSON JSON { get; set; }
+
+    public JSONBound(string key, Type type, JSON json) {
+        Key = key;
+        Type = type;
+        JSON = json;
+    }
+
+    public JSONBound(int key, Type type, JSON json) {
+        Key = key;
+        Type = type;
+        JSON = json;
+    }
+
+    public dynamic? Value {
+        get => JSON[Key, Type];
+        set => JSON[Key] = value;
+    }
+
+    public override string ToString() => Value?.ToString() ?? "null";
+    public static bool operator !(JSONBound bound) => bound.Value == null;
+
+    public void Set(dynamic value) => Value = value;
 }

@@ -8,16 +8,16 @@ namespace NexusPort.System;
 public static class RootConfig {
     public static JSON Root = new JSON("NexusConfig.json");
 
-    public static void Init() {
-        Root.Write(new JsonArray());
-        JsonArray a = new JsonArray();
-        a.Add("test");
-        JsonArray b = new JsonArray();
-        b.Add("test2");
+    public static JSONBound RootTestValue = new JSONBound("RootValue", typeof(string), Root);
 
-        Root[0] = a;
-        Root[1] = b;
-        Console.WriteLine(Root);
+    public static void Init() {
+        // Root.Clear();
+        Console.WriteLine(RootTestValue + " -> 5");
+        if (!RootTestValue) {
+            Console.WriteLine("Is null value");
+        }
+        RootTestValue.Set("test");
+        Console.WriteLine(RootTestValue + " -> 10");
         Root.Write();
     }
 }
