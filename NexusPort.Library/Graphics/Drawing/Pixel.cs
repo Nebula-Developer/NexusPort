@@ -11,6 +11,12 @@ public class Pixel {
         FG = fg;
     }
 
+    public Pixel(RGB bg) {
+        Char = ' ';
+        BG = bg;
+        FG = new RGB();
+    }
+
     public override string ToString() {
         return BG.ToBGEsc() + FG.ToFGEsc() + Char + "\x1b[0m";
     }

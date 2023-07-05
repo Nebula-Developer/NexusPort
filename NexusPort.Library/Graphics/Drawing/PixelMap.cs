@@ -1,24 +1,36 @@
 namespace NexusPort.Graphics;
 
 public class PixelMap {
-    public Pixel[,] Pixels { get; set; }
+    public Pixel[,] Pixels { get; private set; }
     public int Width { get; set; }
     public int Height { get; set; }
     public int X { get; set; }
     public int Y { get; set; }
 
+    public int ApplyXOffset { get; set; }
+    public int ApplyYOffset { get; set; }
+
+    public void SetPixel(int x, int y, Pixel p) {
+        int nX = x + ApplyXOffset;
+        int nY = y + ApplyYOffset;
+        if (nX >= 0 && nX < Width && nY >= 0 && nY < Height)
+            Pixels[nX, nY] = p;
+    }
+
     public PixelMap(int width, int height) {
         Width = width;
         Height = height;
-        Pixels = new Pixel[width, height];
+        Pixels = new Pixel[Width, Height];
+        Clear();
     }
 
     public PixelMap(int width, int height, int x, int y) {
         Width = width;
         Height = height;
-        Pixels = new Pixel[width, height];
         X = x;
         Y = y;
+        Pixels = new Pixel[Width, Height];
+        Clear();
     }
 
     public void Clear(Pixel p) {
@@ -27,41 +39,41 @@ public class PixelMap {
                 Pixels[x, y] = p;
     }
 
-    public void Clear() => Clear(new Pixel(' ', new RGB(), new RGB()));
+    public void Clear() => Clear(new Pixel(new RGB()));
 
     public void ModifyRange(int x, int y, int endX, int endY, Pixel p) {
         for (int i = x; i < endX; i++)
             for (int j = y; j < endY; j++)
-                Pixels[i, j] = p;
+                SetPixel(x, y, p);
     }
 
     public void ModifyRange(int x, int y, int endX, int endY, Func<Pixel, int, int, Pixel> modifier) {
         for (int i = x; i < endX; i++)
             for (int j = y; j < endY; j++)
-                Pixels[i, j] = modifier(Pixels[i, j], i, j);
+                SetPixel(i, j, modifier(Pixels[i, j], i, j));
     }
 
     public void ModifyRingRange(int x, int y, int endX, int endY, Pixel p) {
         for (int i = x; i < endX; i++) {
-            Pixels[i, y] = p;
-            Pixels[i, endY] = p;
+            SetPixel(i, y, p);
+            SetPixel(i, endY, p);
         }
 
         for (int j = y; j < endY; j++) {
-            Pixels[x, j] = p;
-            Pixels[endX, j] = p;
+            SetPixel(x, j, p);
+            SetPixel(endX, j, p);
         }
     }
 
     public void ModifyRingRange(int x, int y, int endX, int endY, Func<Pixel, int, int, Pixel> modifier) {
         for (int i = x; i < endX; i++) {
-            Pixels[i, y] = modifier(Pixels[i, y], i, y);
-            Pixels[i, endY] = modifier(Pixels[i, endY], i, endY);
+            SetPixel(i, y, modifier(Pixels[i, y], i, y));
+            SetPixel(i, endY, modifier(Pixels[i, endY], i, endY));
         }
 
         for (int j = y; j < endY; j++) {
-            Pixels[x, j] = modifier(Pixels[x, j], x, j);
-            Pixels[endX, j] = modifier(Pixels[endX, j], endX, j);
+            SetPixel(x, j, modifier(Pixels[x, j], x, j));
+            SetPixel(endX, j, modifier(Pixels[endX, j], endX, j));
         }
     }
 }
