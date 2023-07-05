@@ -11,5 +11,7 @@ public class TestClass {
 class Program {
     static void Main() {
         Nexus.Init();
+        Console.WriteLine(RootConfig.RootInt);
     }
 }
+

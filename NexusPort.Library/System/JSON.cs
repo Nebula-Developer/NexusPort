@@ -72,30 +72,34 @@ public class JSON {
     }
 }
 
-public class JSONBound {
+#nullable disable
+
+public class JSONBound<T>
+{
     public dynamic Key { get; set; }
-    public Type Type { get; set; }
     public JSON JSON { get; set; }
 
-    public JSONBound(string key, Type type, JSON json) {
+    public JSONBound(dynamic key, JSON json) {
         Key = key;
-        Type = type;
         JSON = json;
     }
-
-    public JSONBound(int key, Type type, JSON json) {
+    
+    public JSONBound(dynamic key, JSON json, T defaultValue) {
         Key = key;
-        Type = type;
         JSON = json;
+        if (!this) this.Set(defaultValue);
     }
 
-    public dynamic? Value {
-        get => JSON[Key, Type];
+    public T Value {
+        get {
+            #nullable enable
+            return JSON[Key, typeof(T)] ?? default(T);
+            #nullable disable
+        }
         set => JSON[Key] = value;
     }
 
+    public void Set(T value) => Value = value;
     public override string ToString() => Value?.ToString() ?? "null";
-    public static bool operator !(JSONBound bound) => bound.Value == null;
-
-    public void Set(dynamic value) => Value = value;
+    public static bool operator !(JSONBound<T> bound) => bound.Value == null;
 }
