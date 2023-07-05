@@ -8,10 +8,10 @@ namespace NexusPort.System;
 
 public static class RootConfig {
     public static JSON Root;
-    public static JSONBound<int> RootInt;
+    public static JSONBound<int> Initializer;
 
     static RootConfig() {
         Root = new JSON("NexusConfig.json");
-        RootInt = new JSONBound<int>("RootInt", Root, 95);
+        Initializer = new JSONBound<int>("RootInt", Root, -1);
     }
 }
