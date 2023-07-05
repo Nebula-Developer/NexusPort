@@ -37,4 +37,15 @@ public class RGB {
 
     public string ToBGEsc() => $"\x1b[48;2;{R};{G};{B}m";
     public string ToFGEsc() => $"\x1b[38;2;{R};{G};{B}m";
+
+    public override bool Equals(object? obj) {
+        if (obj is RGB rgb) {
+            return R == rgb.R && G == rgb.G && B == rgb.B;
+        }
+        return false;
+    }
+
+    public override int GetHashCode() {
+        return HashCode.Combine(R, G, B);
+    }
 }

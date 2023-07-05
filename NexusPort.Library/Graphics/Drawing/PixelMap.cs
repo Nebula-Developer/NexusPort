@@ -33,6 +33,12 @@ public class PixelMap {
         Clear();
     }
 
+    public PixelMap Clone() {
+        PixelMap map = new PixelMap(Width, Height, X, Y);
+        map.Pixels = (Pixel[,])Pixels.Clone();
+        return map;
+    }
+
     public void Clear(Pixel p) {
         for (int x = 0; x < Width; x++)
             for (int y = 0; y < Height; y++)

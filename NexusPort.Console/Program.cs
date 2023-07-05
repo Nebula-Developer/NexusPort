@@ -24,17 +24,20 @@ public static class Program {
 
         // Console.ReadKey(true);
 
-        Window testWindow = new Window(10, 10);
+        int width = Console.WindowWidth;
+        int height = Console.WindowHeight;
 
-        PointElement point = new PointElement(5, 5, new Pixel('x', new RGB(255, 0, 0), new RGB()));
-        testWindow.Elements.Add(point);
+        Window testWindow = new Window(width, height);
+
+        // PointElement point = new PointElement(width / 2, height / 2, new Pixel('x', new RGB(255, 0, 0), new RGB()));
+        // testWindow.Elements.Add(point);
 
         InvertFilter invert = new InvertFilter();
         GrayscaleFilter grayscale = new GrayscaleFilter();
 
-        testWindow.Map.ModifyRange(0, 0, 10, 10, (p, x, y) => {
-            return new Pixel('x', new RGB(x * 20, y * 20, (x + y) * 20), new RGB(y * 20, x * 20, (x + y) * 20));
-        });
+        // testWindow.Map.ModifyRange(0, 0, width, height, (p, x, y) => {
+        //     return new Pixel('x', new RGB(x * 255 / width, y * 255 / height, 0), new RGB());
+        // });
 
         testWindow.Draw();
         Console.ReadKey(true);

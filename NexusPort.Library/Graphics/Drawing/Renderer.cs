@@ -1,17 +1,30 @@
+using System.Text;
+
 namespace NexusPort.Graphics;
 
 public class Renderer {
     public List<PixelMap> Maps { get; set; } = new List<PixelMap>();
 
     public void Draw() {
-        for (int i = 0; i < Maps.Count; i++) {
-            PixelMap map = Maps[i];
-            for (int x = 0; x < map.Width; x++) {
-                for (int y = 0; y < map.Height; y++) {
-                    Console.SetCursorPosition(map.X + x, map.Y + y);
-                    Console.Write(map.Pixels[x, y].ToString());
+        StringBuilder content = new StringBuilder();
+
+        foreach (PixelMap map in Maps)
+        {
+            for (int y = 0; y < map.Height; y++)
+            {
+                string line = "";
+                for (int x = 0; x < map.Width; x++)
+                {
+                    if (x == Console.WindowWidth - 1 && y == Console.WindowHeight - 1)
+                        line += "\x1b[0m ";
+                    else
+                        line += map.Pixels[x, y].ToString();
                 }
+                content.AppendLine(line);
             }
         }
+
+        Console.SetCursorPosition(0, 0);
+        Console.Write(content.ToString().TrimEnd());
     }
 }

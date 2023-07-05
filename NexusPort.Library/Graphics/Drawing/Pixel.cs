@@ -24,4 +24,15 @@ public class Pixel {
     public string ToString(bool reset) {
         return BG.ToBGEsc() + FG.ToFGEsc() + Char + ( reset ? "\x1b[0m" : "" );
     }
+
+    public override bool Equals(object? obj) {
+        if (obj is Pixel pixel) {
+            return Char == pixel.Char && BG.Equals(pixel.BG) && FG.Equals(pixel.FG);
+        }
+        return false;
+    }
+
+    public override int GetHashCode() {
+        return HashCode.Combine(Char, BG, FG);
+    }
 }
