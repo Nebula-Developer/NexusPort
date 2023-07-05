@@ -10,12 +10,6 @@ public class TestClass {
 
 class Program {
     static void Main() {
-        JSON testConfig = new JSON("primary.json");
-        testConfig.Write(new TestClass());
-
-        testConfig["test"] = 5;
-        int? test = testConfig.Get<int>("test");
-        Console.WriteLine(test != null ? test : "null");
-        Console.WriteLine((testConfig.Get<int>("test") ?? "null").ToString());
+        Nexus.Init();
     }
 }

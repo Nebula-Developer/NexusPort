@@ -10,7 +10,7 @@ public class JSON {
     public JsonNode Node { get; private set; }
 
     public JSON(string path) {
-        path = Paths.GetRootPath(path);
+        // path = Paths.GetRootPath(path);
         Path = path;
         if (!File.Exists(path)) File.WriteAllText(path, "{}");
         Node = JsonNode.Parse(File.ReadAllText(path)) ?? new JsonObject();
@@ -27,23 +27,45 @@ public class JSON {
         File.WriteAllText(Path, ToString());
     }
 
-    public void Set(string key, object value) {
-        Node[key] = JsonNode.Parse(JsonSerializer.Serialize(value));
-        File.WriteAllText(Path, ToString());
-    }
+    public void Write() => File.WriteAllText(Path, ToString());
+    public void Clear() => Write(new JsonObject());
 
     public JsonNode? this[string key] {
         get => Node[key];
-        set => this.Set(key, value ?? new JsonObject());
-    }
-
-    public dynamic? Get<T>(string key) {
-        try {
-            return JsonSerializer.Deserialize<T>(Node[key]);
-        } catch {
-            return null;
+        set {
+            Node[key] = value;
+            Write();
         }
     }
 
-    public T? GetT<T>(string key) => Get<T>(key) ?? default(T);
+    public dynamic? this[string key, Type type] {
+        get {
+            try {
+                return JsonSerializer.Deserialize(Node[key]?.ToString() ?? "", type);
+            } catch {
+                return null;
+            }
+        }
+    }
+
+    public JsonNode? this[int key] {
+        get => Node[key];
+        set {
+            if (Node is JsonArray a)
+                while (a.Count <= key) a.Add(new JsonObject());
+
+            Node[key] = value;
+            Write();
+        }
+    }
+
+    public dynamic? this[int key, Type type] {
+        get {
+            try {
+                return JsonSerializer.Deserialize(Node[key]?.ToString() ?? "", type);
+            } catch {
+                return null;
+            }
+        }
+    }
 }
