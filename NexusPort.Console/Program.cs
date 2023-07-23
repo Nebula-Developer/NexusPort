@@ -7,23 +7,6 @@ public static class Program {
         Nexus.Init();
         RootConfig.Initializer.Value = 0; // Will call initializer as the class is being used
 
-        // PixelMap map = new PixelMap(20, 10);
-        // map.Clear(new Pixel('x', new RGB(255, 0, 0), new RGB()));
-
-        // Renderer renderer = new Renderer();
-        // renderer.Maps.Add(map);
-
-        // renderer.Draw();
-        // Console.ReadLine();
-
-        // map.ModifyRange(0, 0, 20, 10, (p, x, y) => {
-        //     return new Pixel('_', new RGB(0, x * 10, y * 20), new RGB());
-        // });
-
-        // renderer.Draw();
-
-        // Console.ReadKey(true);
-
         int width = Console.WindowWidth;
         int height = Console.WindowHeight;
 
@@ -35,9 +18,8 @@ public static class Program {
         InvertFilter invert = new InvertFilter();
         GrayscaleFilter grayscale = new GrayscaleFilter();
 
-        // testWindow.Map.ModifyRange(0, 0, width, height, (p, x, y) => {
-        //     return new Pixel('x', new RGB(x * 255 / width, y * 255 / height, 0), new RGB());
-        // });
+        BoxElement b = new BoxElement(0, 0, width, height, new Pixel(new RGB(100, 100, 100)), new Pixel(new RGB(255, 150, 100)));
+        testWindow.Elements.Add(b);
 
         testWindow.Draw();
         Console.ReadKey(true);

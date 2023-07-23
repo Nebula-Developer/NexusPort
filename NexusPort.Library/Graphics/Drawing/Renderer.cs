@@ -8,17 +8,14 @@ public class Renderer {
     public void Draw() {
         StringBuilder content = new StringBuilder();
 
-        foreach (PixelMap map in Maps)
-        {
-            for (int y = 0; y < map.Height; y++)
-            {
+        foreach (PixelMap map in Maps) {
+            for (int y = 0; y < map.Height; y++) {
                 string line = "";
-                for (int x = 0; x < map.Width; x++)
-                {
+                for (int x = 0; x < map.Width; x++) {
                     if (x == Console.WindowWidth - 1 && y == Console.WindowHeight - 1)
                         line += "\x1b[0m ";
                     else
-                        line += map.Pixels[x, y].ToString();
+                        line += map.Pixels[x, y].ToString(false);
                 }
                 content.AppendLine(line);
             }
